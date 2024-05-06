@@ -6,6 +6,17 @@ public record UpdateProductCommand(Guid Id,
     string Description,
     string ImageFile,
     decimal Price) : ICommand<UpdateProductResult>;
+
+public class UpdateProductCommandValidator:AbstractValidator<UpdateProductCommand>
+{
+    public UpdateProductCommandValidator()
+    {
+        RuleFor(x => x.Id).NotEmpty().WithMessage("Product Id is required");
+        RuleFor(x => x.Name).NotEmpty().WithMessage("Name is required")
+            .Length(2,150).WithMessage("Name must be between 2 and 150 characters");
+        RuleFor(x => x.Price).NotEmpty().WithMessage("Price must be greater than 0");
+    }
+}
 public record UpdateProductResult(bool IsSuccess);
 internal class UpdateProductCommandHandler(IDocumentSession documentSession,ILogger<UpdateProductCommandHandler> logger):ICommandHandler<UpdateProductCommand,UpdateProductResult>
 {
