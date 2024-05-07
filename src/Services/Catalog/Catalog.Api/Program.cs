@@ -1,11 +1,6 @@
-using HealthChecks.UI.Client;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-
 var builder = WebApplication.CreateBuilder(args);
 
-// Add the Service to the container
-
-builder.Services.AddCarter();
+// Add services to the container.
 var assembly = typeof(Program).Assembly;
 builder.Services.AddMediatR(config =>
 {
@@ -14,25 +9,33 @@ builder.Services.AddMediatR(config =>
     config.AddOpenBehavior(typeof(LoggingBehaviour<,>));
 });
 builder.Services.AddValidatorsFromAssembly(assembly);
-builder.Services.AddMarten(opt =>
+
+builder.Services.AddCarter();
+
+builder.Services.AddMarten(opts =>
 {
-    opt.Connection(builder.Configuration.GetConnectionString("Database")!);
+    opts.Connection(builder.Configuration.GetConnectionString("Database")!);    
 }).UseLightweightSessions();
+
 if (builder.Environment.IsDevelopment())
     builder.Services.InitializeMartenWith<CatalogInitialData>();
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+
 builder.Services.AddHealthChecks()
     .AddNpgSql(builder.Configuration.GetConnectionString("Database")!);
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline
-
+// Configure the HTTP request pipeline.
 app.MapCarter();
 
 app.UseExceptionHandler(options => { });
-app.UseHealthChecks("/health",new HealthCheckOptions
-{
-    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-});
+app.UseHttpsRedirection();
+app.UseHealthChecks("/health",
+    new HealthCheckOptions
+    {
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
+
 app.Run();

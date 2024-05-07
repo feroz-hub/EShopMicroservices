@@ -12,3 +12,6 @@ global using Catalog.Api.Data;
 global using Catalog.Api.Models;
 global using Catalog.Api.Exceptions;
 global using Catalog.Api.Products.GetProducts;
+global using HealthChecks.UI.Client;
+global using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+

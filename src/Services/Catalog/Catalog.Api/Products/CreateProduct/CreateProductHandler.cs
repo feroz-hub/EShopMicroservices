@@ -28,6 +28,7 @@ internal class CreateProductCommandHandler(IDocumentSession documentSession):ICo
 {
     public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
     {
+        
         var product = new Product
         {
             Name = command.Name,
