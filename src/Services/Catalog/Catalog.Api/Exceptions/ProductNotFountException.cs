@@ -1,3 +1,5 @@
+
+
 namespace Catalog.Api.Exceptions;
 
-public class ProductNotFountException() : Exception("Product not found");
+public class ProductNotFountException(Guid id) : NotFountException("Product not found",id);

@@ -24,11 +24,10 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
 }
 
 public record CreateProductResult(Guid Id);
-internal class CreateProductCommandHandler(IDocumentSession documentSession,ILogger<CreateProductCommandHandler> logger):ICommandHandler<CreateProductCommand,CreateProductResult>
+internal class CreateProductCommandHandler(IDocumentSession documentSession):ICommandHandler<CreateProductCommand,CreateProductResult>
 {
     public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Create Product Handler.Handle called with {@Command}",command);
         var product = new Product
         {
             Name = command.Name,

@@ -18,14 +18,14 @@ public class UpdateProductCommandValidator:AbstractValidator<UpdateProductComman
     }
 }
 public record UpdateProductResult(bool IsSuccess);
-internal class UpdateProductCommandHandler(IDocumentSession documentSession,ILogger<UpdateProductCommandHandler> logger):ICommandHandler<UpdateProductCommand,UpdateProductResult>
+internal class UpdateProductCommandHandler(IDocumentSession documentSession):ICommandHandler<UpdateProductCommand,UpdateProductResult>
 {
     public async Task<UpdateProductResult> Handle(UpdateProductCommand command, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Update Product Handler.Handle called with {@Command}",command);
+        //logger.LogInformation("Update Product Handler.Handle called with {@Command}",command);
         var product = await documentSession.LoadAsync<Product>(command.Id, cancellationToken);
         if (product is null)
-            throw new ProductNotFountException();
+            throw new ProductNotFountException(command.Id);
         product.Name = command.Name;
         product.Category = command.Category;
         product.Description = command.Description;
