@@ -33,7 +33,7 @@ public class CustomExceptionHandler(ILogger<CustomExceptionHandler> logger):IExc
                    exception.GetType().Name, 
                    httpContext.Response.StatusCode = StatusCodes.Status400BadRequest
                ),
-           NotFountException => 
+           NotFoundException => 
                (
                    exception.Message, 
                    exception.GetType().Name, 

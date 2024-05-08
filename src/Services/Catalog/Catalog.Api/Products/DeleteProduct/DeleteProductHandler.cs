@@ -16,7 +16,7 @@ internal class DeleteProductCommandHandler(IDocumentSession documentSession):ICo
     {
         var product = await documentSession.LoadAsync<Product>(command.Id, cancellationToken);
         if (product is null)
-            throw new ProductNotFountException(command.Id);
+            throw new ProductNotFoundException(command.Id);
         documentSession.Delete<Product>(command.Id);
         await documentSession.SaveChangesAsync(cancellationToken);
         return new DeleteProductResult(true);

@@ -10,7 +10,7 @@ internal class GetProductByIdQueryHandler(IDocumentSession documentSession):IQue
         // logger.LogInformation("GetProductByIdQueryHandler.Handle called with {@Query}",query);
         var product = await documentSession.LoadAsync<Product>(query.Id,cancellationToken);
         if (product is null)
-            throw new ProductNotFountException(query.Id);
+            throw new ProductNotFoundException(query.Id);
         return new GetProductByIdResult(product);
     }
 }
