@@ -6,6 +6,9 @@ services:
    
   basketdb:
     image: postgres
+  
+  distributedcache:
+    image: redis
    
   catalog.api:
     image: catalog.api
@@ -17,6 +20,7 @@ services:
     build:
       context: .
       dockerfile: Services/Basket/Basket.Api/Dockerfile
+  
 
 
 volumes: 
