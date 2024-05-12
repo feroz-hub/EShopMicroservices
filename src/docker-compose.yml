@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.8'
 
 services:
   catalogdb:
@@ -25,9 +25,15 @@ services:
     build:
       context: .
       dockerfile: Services/Discount/Discount.Grpc/Dockerfile
+  ordering.api:
+    image: ordering.api
+    build:
+      context: .
+      dockerfile: Services/Ordering/Ordering.Api/Dockerfile
 
 
 
 volumes: 
   postgres_catalog:
   postgres_basket:
+  
