@@ -12,4 +12,5 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         base.OnModelCreating(builder);
     }
+    
 }
