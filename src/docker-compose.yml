@@ -40,3 +40,14 @@ volumes:
   postgres_catalog:
   postgres_basket:
   
+  shopping.web:
+    image: shopping.web
+    build:
+      context: .
+      dockerfile: WebApps/Shopping.Web/Dockerfile
+
+  shopping.web:
+    image: shopping.web
+    build:
+      context: .
+      dockerfile: WebApps/Shopping.Web/Dockerfile

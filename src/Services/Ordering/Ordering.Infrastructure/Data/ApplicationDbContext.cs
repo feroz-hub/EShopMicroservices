@@ -1,6 +1,8 @@
+using Ordering.Application.Data;
+
 namespace Ordering.Infrastructure.Data;
 
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options):DbContext(options)
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options):DbContext(options),IApplicationDbContext
 {
     public DbSet<Customer> Customers=>Set<Customer>();
     public DbSet<Order> Orders=>Set<Order>();
