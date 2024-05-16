@@ -1,5 +1,3 @@
-using Discount.Grpc;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add Services to the Container.
@@ -40,17 +38,22 @@ builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(
     return handler;
 });
 
+//Async Communication Services
+builder.Services.AddMessageBroker(builder.Configuration);
+
 builder.Services.AddValidatorsFromAssembly(assembly);
+
+//Cross-Cutting Services
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 builder.Services.AddHealthChecks()
     .AddNpgSql(builder.Configuration.GetConnectionString("Database")!)
     .AddRedis(builder.Configuration.GetConnectionString("Redis")!);
-   
+
 var app = builder.Build();
 
 // Configure the https request pipeline
 app.MapGet("/", () => "Hello World!");
-app.UseExceptionHandler(options => { });
+app.UseExceptionHandler(_ => { });
 app.MapCarter();
 app.UseHealthChecks("/health",
     new HealthCheckOptions

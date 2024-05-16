@@ -13,7 +13,7 @@ public static class DependencyInjection
     public static WebApplication UseApiServices(this WebApplication app)
     {
         app.MapCarter();
-        app.UseExceptionHandler(options=> { });
+        app.UseExceptionHandler(_=> { });
         app.UseHealthChecks("/health",new HealthCheckOptions
         {
             ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
