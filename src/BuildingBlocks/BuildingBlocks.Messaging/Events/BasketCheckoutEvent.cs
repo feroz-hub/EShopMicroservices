@@ -7,7 +7,6 @@ public record BasketCheckoutEvent:IntegrationEvent
     public string UserName { get; set; } = default!;
     public Guid CustomerId { get; set; } = default!;
     public decimal TotalPrice { get; set; } = default!;
-    //public List<BasketItemDto> Items { get; set; } = default!;
    
 
     // Shipping and BillingAddress
@@ -25,4 +24,8 @@ public record BasketCheckoutEvent:IntegrationEvent
     public string Expiration { get; set; } = default!;
     public string CVV { get; set; } = default!;
     public int PaymentMethod { get; set; } = default!;
+    
+    // Basket Items
+    public List<BasketItemDto> BasketItems { get; set; } = default!;
+
 }

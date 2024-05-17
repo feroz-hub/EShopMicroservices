@@ -5,7 +5,6 @@ public class BasketCheckoutDto
     public string UserName { get; set; } = default!;
     public Guid CustomerId { get; set; } = default!;
     public decimal TotalPrice { get; set; } = default!;
-    //public List<ShoppingCartItem> BasketItems { get; set; } = default!;
 
     // Shipping and BillingAddress
     public string FirstName { get; set; } = default!;
@@ -22,4 +21,9 @@ public class BasketCheckoutDto
     public string Expiration { get; set; } = default!;
     public string CVV { get; set; } = default!;
     public int PaymentMethod { get; set; } = default!;
+    
+    // Basket Items
+    
+    public List<ShoppingCartItem> BasketItems { get; set; } = default!;
+
 }

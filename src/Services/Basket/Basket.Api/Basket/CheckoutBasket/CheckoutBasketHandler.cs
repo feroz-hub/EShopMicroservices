@@ -23,9 +23,27 @@ public class CheckoutBasketHandler(IBasketRepository basketRepository,IPublishEn
         if (basket is null)
             return new CheckoutBasketResult(false);
 
-        var basketItems = basket.Items;
+        
+        // Map basket items to BasketItemDto
+        // var basketItems = basket.Items.Select(item => new BasketItemDto
+        // {
+        //     ProductId = item.ProductId,
+        //     ProductName = item.ProductName,
+        //     Quantity = item.Quantity,
+        //     Price = item.Price,
+        //     Color = item.Color
+        // }).ToList();
+        //var basketItems = basket.Items;
         var eventMessage = command.BasketCheckoutDto.Adapt<BasketCheckoutEvent>();
         eventMessage.TotalPrice = basket.TotalPrice;
+        eventMessage.BasketItems =  basket.Items.Select(item => new BasketItemDto
+        {
+            ProductId = item.ProductId,
+            ProductName = item.ProductName,
+            Quantity = item.Quantity,
+            Price = item.Price,
+            Color = item.Color
+        }).ToList();
         //eventMessage.Items = basketItems.Select(item => new BasketItemDto(item.ProductId,item.Quantity,item.Price)).ToList();
         await publishEndpoint.Publish(eventMessage, cancellationToken);
         await basketRepository.DeleteBasket(command.BasketCheckoutDto.UserName, cancellationToken);
