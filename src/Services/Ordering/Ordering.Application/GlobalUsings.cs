@@ -13,6 +13,7 @@ global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Logging;
+global using Microsoft.FeatureManagement;
 global using Ordering.Application.Data;
 global using Ordering.Application.Dtos;
 global using Ordering.Application.Exceptions;

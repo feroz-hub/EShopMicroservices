@@ -1,3 +1,5 @@
+using BuildingBlocks.Messaging.EventsDto;
+
 namespace BuildingBlocks.Messaging.Events;
 
 public record BasketCheckoutEvent:IntegrationEvent
@@ -5,6 +7,8 @@ public record BasketCheckoutEvent:IntegrationEvent
     public string UserName { get; set; } = default!;
     public Guid CustomerId { get; set; } = default!;
     public decimal TotalPrice { get; set; } = default!;
+    //public List<BasketItemDto> Items { get; set; } = default!;
+   
 
     // Shipping and BillingAddress
     public string FirstName { get; set; } = default!;

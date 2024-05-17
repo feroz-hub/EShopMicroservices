@@ -3,11 +3,10 @@ using Discount.Grpc.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add Service to the Container
+builder.Services.AddGrpc();
+
 builder.Services.AddDbContext<DiscountContext>(opts =>
     opts.UseSqlite(builder.Configuration.GetConnectionString("Database")));
-
-
-builder.Services.AddGrpc();
 
 var app = builder.Build();
 

@@ -1,3 +1,5 @@
+using BuildingBlocks.Messaging.EventsDto;
+
 namespace Basket.Api.Basket.CheckoutBasket;
 
 public record CheckoutBasketCommand(BasketCheckoutDto BasketCheckoutDto) 
@@ -21,8 +23,10 @@ public class CheckoutBasketHandler(IBasketRepository basketRepository,IPublishEn
         if (basket is null)
             return new CheckoutBasketResult(false);
 
+        var basketItems = basket.Items;
         var eventMessage = command.BasketCheckoutDto.Adapt<BasketCheckoutEvent>();
         eventMessage.TotalPrice = basket.TotalPrice;
+        //eventMessage.Items = basketItems.Select(item => new BasketItemDto(item.ProductId,item.Quantity,item.Price)).ToList();
         await publishEndpoint.Publish(eventMessage, cancellationToken);
         await basketRepository.DeleteBasket(command.BasketCheckoutDto.UserName, cancellationToken);
         return new CheckoutBasketResult(true);

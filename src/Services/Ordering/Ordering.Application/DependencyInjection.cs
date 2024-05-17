@@ -1,5 +1,3 @@
-using Microsoft.FeatureManagement;
-
 namespace Ordering.Application;
 public static class DependencyInjection
 { 
