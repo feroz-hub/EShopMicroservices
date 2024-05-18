@@ -39,6 +39,11 @@ services:
     build:
       context: .
       dockerfile: Services/Ordering/Ordering.Api/Dockerfile
+  yarpapigateway:
+    image: yarpapigateway
+    build:
+      context: .
+      dockerfile: ApiGateways/YarpApiGateWay/Dockerfile
   
   #shopping.web:
   # image: shopping.web
@@ -52,4 +57,5 @@ services:
 volumes: 
   postgres_catalog:
   postgres_basket:
+  
   
