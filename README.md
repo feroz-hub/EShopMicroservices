@@ -53,3 +53,31 @@ The project is designed using microservices architecture, where each service is 
 ```sh
 git clone https://github.com/yourusername/EShopMicroservices.git
 cd EShopMicroservices
+Running the Services
+Using Docker Compose
+To run all the services using Docker Compose, navigate to the root directory of the project and run:
+
+docker-compose up
+This will start all the services along with RabbitMQ and SQL Server containers.
+
+Endpoints
+Basket Service
+GET /api/basket/{username}
+POST /api/basket
+DELETE /api/basket/{username}
+Ordering Service
+POST /api/orders
+GET /api/orders/{id}
+Discount Service
+GET /api/discount/{productName}
+POST /api/discount
+Sample Data
+You can use the following sample data for testing the services:
+
+Contributing
+Contributions are welcome! Please open an issue or submit a pull request for any improvements or new features.
+
+License
+This project is licensed under the MIT License.
+
+
