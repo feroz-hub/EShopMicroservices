@@ -22,8 +22,7 @@ public class AuthService(ApplicationDbContext dbContext,UserManager<ApplicationU
 
     public async Task<(LoginResponseDto loginResponseDto,string ErrorMessage)> Login(LoginRequestDto loginRequestDto)
     {
-        var user =await dbContext.ApplicationsUsers.FirstOrDefaultAsync(u =>
-            string.Equals(u.UserName.ToLower(), loginRequestDto.Username.ToLower(), StringComparison.Ordinal));
+        var user =await dbContext.ApplicationsUsers.FirstOrDefaultAsync(u =>u.UserName.ToLower()==loginRequestDto.Username.ToLower());
 
         var isValid = await userManager.CheckPasswordAsync(user,loginRequestDto.Password);
 
