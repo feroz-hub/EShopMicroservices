@@ -17,6 +17,12 @@ builder.Services.AddHealthChecks()
 var app = builder.Build();
 
 // Configure the http request pipeline
+app.UseMiddleware<DependencyInjectionMiddleware>();
+// using (var scope = app.Services.CreateScope())
+// {
+//     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+//     dbContext.Database.Migrate();
+// }
 app.MapCarter();
 app.UseExceptionHandler(_ => { });
 app.UseHealthChecks("/health",

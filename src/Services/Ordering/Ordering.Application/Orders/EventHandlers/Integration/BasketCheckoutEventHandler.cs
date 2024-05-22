@@ -6,6 +6,7 @@ public class BasketCheckoutEventHandler(ISender sender,ILogger<BasketCheckoutEve
     {
         logger.LogInformation("Integration Event handled: {IntegrationEvent}", context.Message.GetType().Name);
         var command = MapToCreateOrderCommand(context.Message);
+        
         await sender.Send(command);
     }
     private static CreateOrderCommand MapToCreateOrderCommand(BasketCheckoutEvent message)

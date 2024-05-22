@@ -2,7 +2,7 @@ namespace Auth.Api.Services;
 
 public class AuthService(ApplicationDbContext dbContext,UserManager<ApplicationUser> userManager,RoleManager<IdentityRole> roleManager,IJwtTokenGenerator jwtTokenGenerator):IAuthService
 {
-    public async Task<string> Register(RegistrationRequestDto registrationRequestDto)
+    public async Task<(UserDto User,string ErrorMessage)> Register(RegistrationRequestDto registrationRequestDto)
     {
         ApplicationUser user = new()
         {
@@ -14,10 +14,10 @@ public class AuthService(ApplicationDbContext dbContext,UserManager<ApplicationU
         };
 
         var result = await userManager.CreateAsync(user, registrationRequestDto.Password);
-        if (!result.Succeeded) return result.Errors.FirstOrDefault().Description;
+        if (!result.Succeeded) return (null,result.Errors.FirstOrDefault().Description);
         var userToReturn = dbContext.ApplicationsUsers.First(u => u.UserName == registrationRequestDto.Email);
         var userDto = new UserDto(userToReturn.Id, userToReturn.Email, userToReturn.Name, userToReturn.PhoneNumber);
-        return string.Empty;
+        return (userDto,null);
     }
 
     public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
