@@ -1,0 +1,18 @@
+﻿@page
+@model WebApp.Pages.IndexModel
+@{
+    ViewData["Title"] = "CongoCart - Home";
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/index.css" />
+}
+
+<div class="index-page">
+    <div>
+        <h1 class="display-4 animated-text">Welcome to CongoCart</h1>
+        <p class="slogan">Everything You Need</p>
+        <a href="/shop" class="btn btn-primary shop-now-button">Shop Now</a>
+    </div>
+</div>
