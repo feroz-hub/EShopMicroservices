@@ -20,7 +20,7 @@ public class AuthService(ApplicationDbContext dbContext,UserManager<ApplicationU
         return (userDto,null);
     }
 
-    public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
+    public async Task<(LoginResponseDto loginResponseDto,string ErrorMessage)> Login(LoginRequestDto loginRequestDto)
     {
         var user =await dbContext.ApplicationsUsers.FirstOrDefaultAsync(u =>
             string.Equals(u.UserName.ToLower(), loginRequestDto.Username.ToLower(), StringComparison.Ordinal));
@@ -29,7 +29,7 @@ public class AuthService(ApplicationDbContext dbContext,UserManager<ApplicationU
 
         if(user==null || isValid == false)
         {
-            return new LoginResponseDto(null, string.Empty);
+            return (null, string.Empty);
         }
         //if user was found , Generate JWT Token
         var roles = await userManager.GetRolesAsync(user);
@@ -37,17 +37,20 @@ public class AuthService(ApplicationDbContext dbContext,UserManager<ApplicationU
 
         var userDto = new UserDto(user.Id, user.Email, user.Name, user.PhoneNumber);
         var loginResponseDto = new LoginResponseDto(userDto,token);
-        return loginResponseDto;}
+        return (loginResponseDto,null);
+        
+    }
 
-    public async Task<bool> AssignRole(string email, string roleName)
+    public async Task<(bool IsSuccess,string ErrorMessage)> AssignRole(string email, string roleName)
     {
-        var user = await dbContext.ApplicationsUsers.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
-        if (user == null) return false;
-        if (!roleManager.RoleExistsAsync(roleName).GetAwaiter().GetResult())
-            //create role if it does not exist
-            roleManager.CreateAsync(new IdentityRole(roleName)).GetAwaiter().GetResult();
-        await userManager.AddToRoleAsync(user, roleName);
-        return true;
+        var user = await userManager.FindByEmailAsync(email);
+        if (user == null)
+        {
+            return (false, "User not found");
+        }
+
+        var result = await userManager.AddToRoleAsync(user, roleName);
+        return !result.Succeeded ? (false, result.Errors.FirstOrDefault()?.Description) : (true, null);
     }
 }
 
