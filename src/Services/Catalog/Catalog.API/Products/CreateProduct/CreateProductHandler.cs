@@ -25,7 +25,7 @@ public record CreateProductResult(Guid Id);
 /// <summary>
 /// Handles the <see cref="CreateProductCommand"/> to create a new product.
 /// </summary>
-internal class CreateProductCommandHandler : ICommandHandler<CreateProductCommand, CreateProductResult>
+internal class CreateProductCommandHandler (IDocumentSession session): ICommandHandler<CreateProductCommand, CreateProductResult>
 {
     /// <summary>
     /// Handles the creation of a new product.
@@ -35,6 +35,7 @@ internal class CreateProductCommandHandler : ICommandHandler<CreateProductComman
     /// <returns>The result containing the new product's ID.</returns>
     public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
     {
+        // Create a new Product instance using the details from the command
         var product = new Product
         {
             Name = command.Name,
@@ -43,6 +44,11 @@ internal class CreateProductCommandHandler : ICommandHandler<CreateProductComman
             ImageFile = command.ImageFile,
             Category = command.Category
         };
-        return new CreateProductResult(Guid.NewGuid());
+        // Store the new product in the session
+        session.Store(product);
+        // Persist changes to the database
+        await session.SaveChangesAsync(cancellationToken);
+        // Return the result containing the new product's ID
+        return new CreateProductResult(product.Id);
     }
 }

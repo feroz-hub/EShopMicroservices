@@ -17,7 +17,7 @@ public class CreateProductEndpoint : ICarterModule
 {
     /// <summary>
     /// Adds the route for creating a product.
-    /// </summary>
+    ///  </summary>
     /// <param name="app">The endpoint route builder.</param>
     public void AddRoutes(IEndpointRouteBuilder app)
     {
