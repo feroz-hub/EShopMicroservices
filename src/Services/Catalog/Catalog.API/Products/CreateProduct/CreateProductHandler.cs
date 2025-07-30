@@ -1,3 +1,5 @@
+
+
 namespace Catalog.API.Products.CreateProduct;
 
 /// <summary>
@@ -22,10 +24,22 @@ public record CreateProductCommand(
 /// <param name="Id">The unique identifier of the created product.</param>
 public record CreateProductResult(Guid Id);
 
+public class CreateProductCommandValidator:AbstractValidator<CreateProductCommand>
+{
+    public CreateProductCommandValidator()
+    {
+        RuleFor(x => x.Name).NotEmpty().WithMessage("Product name is required.");
+        RuleFor(x => x.Description).NotEmpty().WithMessage("Product description is required.");
+        RuleFor(x => x.Price).GreaterThan(0).WithMessage("Product price must be greater than zero.");
+        RuleFor(x => x.ImageFile).NotEmpty().WithMessage("ImageFile is required");
+        RuleFor(x => x.Category).NotEmpty().WithMessage("At least one product category is required.");
+    }
+}
+
 /// <summary>
 /// Handles the <see cref="CreateProductCommand"/> to create a new product.
 /// </summary>
-internal class CreateProductCommandHandler (IDocumentSession session): ICommandHandler<CreateProductCommand, CreateProductResult>
+internal class CreateProductCommandHandler (IDocumentSession session,ILogger<CreateProductCommandHandler> logger): ICommandHandler<CreateProductCommand, CreateProductResult>
 {
     /// <summary>
     /// Handles the creation of a new product.
@@ -35,6 +49,8 @@ internal class CreateProductCommandHandler (IDocumentSession session): ICommandH
     /// <returns>The result containing the new product's ID.</returns>
     public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
     {
+        logger.LogInformation("CreateProductCommandHandler.Handle called with {@Command}", command);
+
         // Create a new Product instance using the details from the command
         var product = new Product
         {

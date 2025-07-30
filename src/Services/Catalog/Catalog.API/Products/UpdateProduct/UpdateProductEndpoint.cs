@@ -1,0 +1,37 @@
+﻿
+namespace Catalog.API.Products.UpdateProduct;
+
+public record UpdateProductRequest(
+    Guid Id,
+    string Name,
+    List<string> Category,
+    string Description,
+    decimal Price,
+    string ImageUrl);
+
+public record UpdateProductResponse(bool IsSuccess);
+public class UpdateProductEndpoint : ICarterModule
+{
+    public void AddRoutes(IEndpointRouteBuilder app)
+    {
+        app.MapPut("/products", async(UpdateProductRequest request, ISender sender) =>
+        {
+            var command =request.Adapt<UpdateProductCommand>();
+            var result = await sender.Send(command);
+            var response = result.Adapt<UpdateProductResponse>();
+            if (!response.IsSuccess)
+            {
+                return Results.Problem("Failed to update product", statusCode: StatusCodes.Status500InternalServerError);
+            }
+            return Results.Ok(response);
+        })
+        .WithName("UpdateProduct")
+        .WithSummary("Update an existing product")
+        .Produces<UpdateProductResponse>(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status500InternalServerError)
+        .ProducesProblem(StatusCodes.Status400BadRequest)
+        .WithDescription("This endpoint updates an existing product in the catalog. " +
+                         "It requires the product ID and the updated details of the product.");
+    }
+       
+}
