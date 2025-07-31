@@ -1,3 +1,4 @@
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -21,12 +22,20 @@ if(builder.Environment.IsDevelopment())
     builder.Services.InitializeMartenWith<CatalogInitialData>();
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>(); // Registers a custom exception handler for handling exceptions globally
-
+builder.Services.AddHealthChecks()
+    .AddNpgSql(builder.Configuration.GetConnectionString("Database")!); // Adds a health check for the PostgreSQL database
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.MapCarter();
 
 app.UseExceptionHandler(appError => { });
+
+app.UseHealthChecks("/health",
+    new HealthCheckOptions
+    {
+        Predicate = _ => true, // Run all health checks
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse // Use the default UI response writer for health checks
+    });
 
 app.Run();

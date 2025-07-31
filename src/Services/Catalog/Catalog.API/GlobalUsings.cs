@@ -12,3 +12,5 @@ global using MediatR;
 global using Marten;
 global using Catalog.API.Exceptions;
 global using FluentValidation;
+global using HealthChecks.UI.Client;
+global using Microsoft.AspNetCore.Diagnostics.HealthChecks;
