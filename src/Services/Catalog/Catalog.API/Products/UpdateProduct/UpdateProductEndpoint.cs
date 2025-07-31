@@ -19,11 +19,7 @@ public class UpdateProductEndpoint : ICarterModule
             var command =request.Adapt<UpdateProductCommand>();
             var result = await sender.Send(command);
             var response = result.Adapt<UpdateProductResponse>();
-            if (!response.IsSuccess)
-            {
-                return Results.Problem("Failed to update product", statusCode: StatusCodes.Status500InternalServerError);
-            }
-            return Results.Ok(response);
+            return !response.IsSuccess ? Results.Problem("Failed to update product", statusCode: StatusCodes.Status500InternalServerError) : Results.Ok(response);
         })
         .WithName("UpdateProduct")
         .WithSummary("Update an existing product")

@@ -39,7 +39,7 @@ public class CreateProductCommandValidator:AbstractValidator<CreateProductComman
 /// <summary>
 /// Handles the <see cref="CreateProductCommand"/> to create a new product.
 /// </summary>
-internal class CreateProductCommandHandler (IDocumentSession session,ILogger<CreateProductCommandHandler> logger): ICommandHandler<CreateProductCommand, CreateProductResult>
+internal class CreateProductCommandHandler (IDocumentSession session): ICommandHandler<CreateProductCommand, CreateProductResult>
 {
     /// <summary>
     /// Handles the creation of a new product.
@@ -49,8 +49,6 @@ internal class CreateProductCommandHandler (IDocumentSession session,ILogger<Cre
     /// <returns>The result containing the new product's ID.</returns>
     public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
     {
-        logger.LogInformation("CreateProductCommandHandler.Handle called with {@Command}", command);
-
         // Create a new Product instance using the details from the command
         var product = new Product
         {

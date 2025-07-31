@@ -16,9 +16,8 @@ public record GetProductByIdResult(Product Product);
 /// Handles the retrieval of a product by its unique identifier.
 /// </summary>
 /// <param name="session">The document session for database access.</param>
-/// <param name="logger">The logger instance for logging operations.</param>
 
-internal class GetProductByIdQueryHandler(IDocumentSession session, ILogger<GetProductByIdQueryHandler> logger) : IQueryHandler<GetProductByIdQuery, GetProductByIdResult>
+internal class GetProductByIdQueryHandler(IDocumentSession session) : IQueryHandler<GetProductByIdQuery, GetProductByIdResult>
 {
     /// <summary>
     /// Handles the GetProductByIdQuery and returns the product if found.
@@ -29,8 +28,7 @@ internal class GetProductByIdQueryHandler(IDocumentSession session, ILogger<GetP
     /// <exception cref="ProductNotFoundException">Thrown if the product is not found.</exception>
     public async Task<GetProductByIdResult> Handle(GetProductByIdQuery query, CancellationToken cancellationToken)
     {
-        logger.LogInformation("GetProductByIdQueryHandler.Handle called with {@query}", query);
         var product = await session.LoadAsync<Product>(query.Id, cancellationToken);
-        return product == null ? throw new ProductNotFoundException() : new GetProductByIdResult(product);
+        return product == null ? throw new ProductNotFoundException(query.Id) : new GetProductByIdResult(product);
     }
 }

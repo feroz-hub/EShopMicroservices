@@ -33,16 +33,14 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
     }
 }
 
-internal class UpdateProductCommandHandler(IDocumentSession session, ILogger<UpdateProductCommandHandler> logger) : ICommandHandler<UpdateProductCommand, UpdateProductResult>
+internal class UpdateProductCommandHandler(IDocumentSession session) : ICommandHandler<UpdateProductCommand, UpdateProductResult>
 {
     public async Task<UpdateProductResult> Handle(UpdateProductCommand command, CancellationToken cancellationToken)
     {
-        logger.LogInformation("UpdateProductCommandHandler.Handle called with {@command}", command);
         var product = await session.LoadAsync<Product>(command.Id, cancellationToken);
         if (product == null)
         {
-            logger.LogWarning("Product with ID {Id} not found", command.Id);
-            throw new ProductNotFoundException();
+            throw new ProductNotFoundException(command.Id);
         }
         product.Name = command.Name;
         product.Category = command.Category;
@@ -51,7 +49,6 @@ internal class UpdateProductCommandHandler(IDocumentSession session, ILogger<Upd
         product.ImageFile = command.ImageUrl;
         session.Update(product);
         await session.SaveChangesAsync(cancellationToken);
-        logger.LogInformation("Product with ID {Id} updated successfully", command.Id);
         return new UpdateProductResult(true);
     }
 }
